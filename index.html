@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Color Changing Background</title>
+    <title>Seyaa</title>
     <style>
         * {
             margin: 0;
@@ -12,15 +12,15 @@
         }
         body {
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
             height: 100vh;
             overflow: hidden;
-            position: relative;
             background: linear-gradient(45deg, #ff5733, #33ff57, #3357ff, #ff33a1);
             background-size: 300% 300%;
             animation: changeColors 10s infinite alternate;
+            position: relative;
         }
 
         @keyframes changeColors {
@@ -31,9 +31,10 @@
 
         /* Title */
         .carousel-title {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: bold;
             color: white;
+            text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
             margin-bottom: 20px;
         }
 
@@ -71,44 +72,17 @@
             filter: grayscale(0%);
         }
 
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            justify-content: center;
-            align-items: center;
-            z-index: 3;
-        }
-
-        .modal video {
-            width: 80%;
-            max-width: 600px;
-        }
-
-        .close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 30px;
-            color: white;
-            cursor: pointer;
-        }
-
-        /* Background Music Button */
+        /* Transparent Play/Stop Button */
         #musicToggle {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
+            background: none;
             border: none;
-            border-radius: 10px;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            outline: none;
+            margin-top: 20px;
         }
 
         @media (max-width: 600px) {
@@ -120,8 +94,7 @@
     </style>
 </head>
 <body>
-    <!-- Title -->
-    <h1 class="carousel-title">Aiswaria Rai Thangavel ♡</h1>
+    <h1 class="carousel-title">♡ Aiswaria Rai Thangavel ♡</h1>
 
     <!-- Image Carousel -->
     <div class="carousel">
@@ -133,38 +106,31 @@
             <img src="5.jpg" alt="Slide 5" data-video="05.mp4">
             <img src="6.jpg" alt="Slide 6" data-video="06.mp4">
             <img src="8.jpg" alt="Slide 8" data-video="07.mp4">
-            <img src="08.png" alt="Slide 9" data-video="09.mp4">
+            <img src="9.jpg" alt="Slide 9" data-video="09.mp4">
         </div>
     </div>
-    
+
+    <!-- Play/Stop Music Button -->
+    <button id="musicToggle">▶ Play Music</button>
+
     <!-- Background Music -->
-    <audio id="backgroundMusic" loop autoplay muted>
-        <source src="lagi.mp3" type="audio/mpeg">
-        Your browser does not support the audio tag.
+    <audio id="backgroundMusic" loop>
+        <source src="dream.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
     </audio>
-
-    <!-- Music Toggle Button -->
-    <button id="musicToggle">🔊 Play Music</button>
-
-    <!-- Video Modal -->
-    <div class="modal" id="videoModal">
-        <span class="close">&times;</span>
-        <video id="modalVideo" controls>
-            <source src="" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </div>
 
     <script>
         const carouselImages = document.querySelector('.carousel-images');
         const images = document.querySelectorAll('.carousel-images img');
-        const modal = document.getElementById("videoModal");
-        const modalVideo = document.getElementById("modalVideo");
-        const closeModal = document.querySelector(".close");
+        const music = document.getElementById("backgroundMusic");
+        const musicToggle = document.getElementById("musicToggle");
         let index = 0;
         const imgWidth = images[0].clientWidth + 30; // Image width + margin
         let startX = 0;
         let isDragging = false;
+
+        // Set lower music volume (30%)
+        music.volume = 0.3;
 
         function updateCarousel() {
             const centerOffset = (carouselImages.clientWidth / 2) - (imgWidth / 2);
@@ -186,7 +152,7 @@
             updateCarousel();
         };
 
-        // Touch event listeners
+        // Touch event listeners for swipe
         carouselImages.addEventListener('touchstart', (e) => {
             startX = e.touches[0].clientX;
             isDragging = true;
@@ -220,31 +186,16 @@
             isDragging = false;
         });
 
-        // Image click to open video modal
-        images.forEach(img => {
-            img.addEventListener('click', () => {
-                const videoSrc = img.getAttribute('data-video');
-                if (videoSrc) {
-                    modalVideo.src = videoSrc;
-                    modal.style.display = "flex";
-                }
-            });
-        });
-
-        // Close modal
-        closeModal.addEventListener('click', () => {
-            modal.style.display = "none";
-            modalVideo.pause();
-            modalVideo.src = "";
-        });
-
-        // Music toggle
-        const music = document.getElementById("backgroundMusic");
-        const musicToggle = document.getElementById("musicToggle");
-
+        // Play/Stop Music Button
         musicToggle.addEventListener("click", () => {
-            music.muted = !music.muted;
-            musicToggle.textContent = music.muted ? "🔊 Play Music" : "🔇 Mute Music";
+            if (music.paused) {
+                music.play();
+                musicToggle.textContent = "⏹ Stop Music";
+            } else {
+                music.pause();
+                music.currentTime = 0;
+                musicToggle.textContent = "▶ Play Music";
+            }
         });
 
     </script>
