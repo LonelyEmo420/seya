@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Image Slider</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(45deg, #3f51b5, #9c27b0, #4caf50);
+            background-size: 200% 200%;
+            animation: gradientBG 10s ease infinite;
+            flex-direction: column;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .carousel {
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .carousel-images {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.5s ease-in-out;
+        }
+        .carousel-images img {
+            width: 200px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 20px;
+            filter: grayscale(100%);
+            transition: transform 0.3s, filter 0.3s;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+        .carousel-images img:hover {
+            transform: scale(1.1);
+            filter: grayscale(0%);
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .prev, .next {
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 20px;
+            border-radius: 10px;
+            margin: 0 10px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal video {
+            width: 80%;
+            max-width: 600px;
+        }
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+        }
+        @media (max-width: 600px) {
+            .carousel-images img {
+                width: 150px;
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="carousel">
+        <div class="carousel-images">
+            <img src="1.jpg" alt="Slide 1">
+            <img src="2.jpg" alt="Slide 2">
+            <img src="3.jpg" alt="Slide 3">
+            <img src="4.jpg" alt="Slide 4">
+            <img src="5.jpg" alt="Slide 5">
+            <img src="6.jpg" alt="Slide 6">
+            <img src="7.jpg" alt="Slide 7">
+            <img src="8.jpg" alt="Slide 8">
+            <img src="08.png" alt="Slide 9">
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button class="prev">&#10094; Previous</button>
+        <button class="next">Next &#10095;</button>
+    </div>
+    
+    <div class="modal" id="videoModal">
+        <span class="close">&times;</span>
+        <video id="modalVideo" controls>
+            <source src="" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    
+    <script>
+        const carouselImages = document.querySelector('.carousel-images');
+        const images = document.querySelectorAll('.carousel-images img');
+        const prevBtn = document.querySelector('.prev');
+        const nextBtn = document.querySelector('.next');
+        const modal = document.getElementById("videoModal");
+        const modalVideo = document.getElementById("modalVideo");
+        const closeModal = document.querySelector(".close");
+        let index = 0;
+        
+        function updateCarousel() {
+            carouselImages.style.transform = `translateX(${-index * 220}px)`;
+        }
+        
+        window.onload = () => {
+            index = 0;
+            updateCarousel();
+        };
+        
+        nextBtn.addEventListener('click', () => {
+            index = (index + 1) % images.length;
+            updateCarousel();
+        });
+        
+        prevBtn.addEventListener('click', () => {
+            index = (index - 1 + images.length) % images.length;
+            updateCarousel();
+        });
+        
+        images.forEach(img => {
+            img.addEventListener('click', () => {
+                const videoSrc = img.getAttribute('data-video');
+                modalVideo.src = videoSrc;
+                modal.style.display = "flex";
+            });
+        });
+        
+        closeModal.addEventListener('click', () => {
+            modal.style.display = "none";
+            modalVideo.pause();
+            modalVideo.src = "";
+        });
+    </script>
+</body>
+</html>
