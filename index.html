@@ -168,8 +168,25 @@
             }
         });
 
-        document.querySelectorAll('.carousel-images img').forEach(img => {
+        function attachClickEvent(img) {
             img.addEventListener('click', function () {
+                // Restore previous video back to image
+                const existingVideo = document.querySelector('.carousel-images video');
+                if (existingVideo) {
+                    const originalImg = document.createElement('img');
+                    originalImg.src = existingVideo.getAttribute('data-img');
+                    originalImg.alt = existingVideo.alt;
+                    originalImg.setAttribute('data-video', existingVideo.src);
+                    originalImg.style.width = existingVideo.style.width;
+                    originalImg.style.height = existingVideo.style.height;
+                    originalImg.style.borderRadius = '20px';
+                    originalImg.classList = existingVideo.classList;
+
+                    existingVideo.replaceWith(originalImg);
+                    attachClickEvent(originalImg);
+                }
+
+                // Replace clicked image with video
                 const videoSrc = this.getAttribute('data-video');
                 const video = document.createElement('video');
                 video.src = videoSrc;
@@ -178,13 +195,19 @@
                 video.style.width = this.style.width;
                 video.style.height = this.style.height;
                 video.style.borderRadius = '20px';
+                video.setAttribute('data-img', this.src);
+                video.alt = this.alt;
+
                 this.replaceWith(video);
 
                 video.addEventListener('ended', function () {
                     video.replaceWith(img);
+                    attachClickEvent(img);
                 });
             });
-        });
+        }
+
+        document.querySelectorAll('.carousel-images img').forEach(attachClickEvent);
     </script>
 </body>
 </html>
