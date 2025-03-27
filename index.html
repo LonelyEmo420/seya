@@ -123,6 +123,12 @@
             carouselImages.style.transform = `translateX(${-index * imgWidth}px)`;
         }
 
+        // Ensure first image is displayed on load
+        window.onload = () => {
+            index = 0;
+            updateCarousel();
+        };
+
         // Touch event listeners
         carouselImages.addEventListener('touchstart', (e) => {
             startX = e.touches[0].clientX;
@@ -175,7 +181,6 @@
             modalVideo.src = "";
         });
 
-        window.addEventListener('load', updateCarousel);
     </script>
 </body>
 </html>
