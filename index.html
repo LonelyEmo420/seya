@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seyaa</title>
+    <title>Color Changing Background</title>
     <style>
         * {
             margin: 0;
@@ -15,17 +15,20 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: linear-gradient(45deg, #3f51b5, #9c27b0, #4caf50);
-            background-size: 200% 200%;
-            animation: gradientBG 10s ease infinite;
-            flex-direction: column;
             overflow: hidden;
+            position: relative;
+            background: linear-gradient(45deg, #ff5733, #33ff57, #3357ff, #ff33a1);
+            background-size: 300% 300%;
+            animation: changeColors 10s infinite alternate;
         }
-        @keyframes gradientBG {
+
+        @keyframes changeColors {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+
+        /* Carousel */
         .carousel {
             position: relative;
             width: 80%;
@@ -35,11 +38,18 @@
             justify-content: center;
             align-items: center;
             touch-action: pan-y;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            z-index: 2;
+            background: none;
         }
+
         .carousel-images {
             display: flex;
             transition: transform 0.5s ease-in-out;
         }
+
         .carousel-images img {
             width: 200px;
             height: 300px;
@@ -50,10 +60,12 @@
             margin: 0 15px;
             cursor: pointer;
         }
+
         .carousel-images img.active {
             transform: scale(1.2);
             filter: grayscale(0%);
         }
+
         .modal {
             display: none;
             position: fixed;
@@ -64,11 +76,14 @@
             background: rgba(0, 0, 0, 0.8);
             justify-content: center;
             align-items: center;
+            z-index: 3;
         }
+
         .modal video {
             width: 80%;
             max-width: 600px;
         }
+
         .close {
             position: absolute;
             top: 20px;
@@ -77,6 +92,7 @@
             color: white;
             cursor: pointer;
         }
+
         @media (max-width: 600px) {
             .carousel-images img {
                 width: 150px;
@@ -86,19 +102,18 @@
     </style>
 </head>
 <body>
+    <!-- Image Carousel -->
     <div class="carousel">
         <div class="carousel-images">
-            <img src="1.jpg" alt="Slide 1" data-video="01.mp4">
-            <img src="2.jpg" alt="Slide 2" data-video="02.mp4">
-            <img src="3.jpg" alt="Slide 3" data-video="03.mp4">
-            <img src="4.jpg" alt="Slide 4" data-video="04.mp4">
-            <img src="5.jpg" alt="Slide 5" data-video="05.mp4">
-            <img src="6.jpg" alt="Slide 6" data-video="06.mp4">
-            <img src="8.jpg" alt="Slide 8" data-video="07.mp4">
-            <img src="08.png" alt="Slide 9" data-video="09.mp4">
+            <img src="1.jpg" alt="Slide 1" data-video="video1.mp4">
+            <img src="2.jpg" alt="Slide 2" data-video="video2.mp4">
+            <img src="3.jpg" alt="Slide 3" data-video="video3.mp4">
+            <img src="4.jpg" alt="Slide 4" data-video="video4.mp4">
+            <img src="5.jpg" alt="Slide 5" data-video="video5.mp4">
         </div>
     </div>
     
+    <!-- Video Modal -->
     <div class="modal" id="videoModal">
         <span class="close">&times;</span>
         <video id="modalVideo" controls>
